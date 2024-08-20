@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import styles from './Login.module.scss'; // Assuming you're using Sass
 
 const Login = () => {
   const router = useRouter();
@@ -18,14 +17,14 @@ const Login = () => {
       <input
         type="text"
         placeholder="Username"
-        className="mb-4 p-3 w-80 text-black"
+        className="mb-4 p-3 w-80 rounded-sm text-black"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
       <input
         type="password"
         placeholder="Password"
-        className="mb-6 p-3 w-80 text-black"
+        className="mb-6 p-3 w-80 rounded-sm text-black"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
@@ -40,6 +39,14 @@ const Login = () => {
           onClick={() => router.push('/signup')} 
           className="text-cyan-500 hover:text-cyan-300 cursor-pointer">
           Sign up Now.
+        </span>
+      </p>
+      <p className="mt-4 text-sm text-gray-300">
+        Back to{' '}
+        <span 
+          onClick={() => router.push('/')} 
+          className="text-sm text-cyan-400 hover:text-cyan-300 cursor-pointer">
+          Home
         </span>
       </p>
     </div>

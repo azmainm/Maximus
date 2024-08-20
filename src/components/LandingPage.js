@@ -14,7 +14,7 @@ const LandingPage = () => {
       <p className="text-xl mb-8">Body. Mind. <span className='text-cyan-300'>Future.</span></p>
       <button
         onClick={handleLoginClick}
-        className="px-6 py-3 bg-black border border-white rounded-lg hover:bg-cyan-300 hover:scale-105 transition ease-in-out duration-300">
+        className="px-6 py-3 bg-black border border-white rounded-lg hover:bg-cyan-800 hover:scale-105 transition ease-in-out duration-300">
         Breathe in
       </button>
     </div>
