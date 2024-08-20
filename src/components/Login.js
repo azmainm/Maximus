@@ -29,7 +29,8 @@ const Login = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button 
-        onClick={handleLogin} 
+        // onClick={handleLogin} 
+        onClick={() => router.push('/createpost')} 
         className="px-6 py-3 bg-black border border-white rounded-lg hover:bg-cyan-800 hover:scale-105 transition ease-in duration-200">
         Log In
       </button>

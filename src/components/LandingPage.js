@@ -10,11 +10,11 @@ const LandingPage = () => {
 
   return (
     <div className="h-screen flex flex-col justify-center items-center bg-black text-white font-poppins">
-      <h1 className="text-8xl font-bold mb-4 text-center">Shape Your</h1>
-      <p className="text-xl mb-8">Body. Mind. <span className='text-cyan-300'>Future.</span></p>
+      <h2 className="text-6xl font-medium mb-4 text-center">Shape Your</h2>
+      <h1 className="text-9xl font-bold mb-8">Body. Mind. <span className='text-cyan-300'>Future.</span></h1>
       <button
         onClick={handleLoginClick}
-        className="px-6 py-3 bg-black border border-white rounded-lg hover:bg-cyan-800 hover:scale-105 transition ease-in-out duration-300">
+        className="px-20 py-8 text-xl bg-black border border-white rounded-lg hover:bg-cyan-800 hover:scale-105 transition ease-in-out duration-300">
         Breathe in
       </button>
     </div>

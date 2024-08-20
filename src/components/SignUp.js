@@ -23,6 +23,7 @@ const SignUp = () => {
         value={fullName}
         onChange={(e) => setFullName(e.target.value)}
       />
+      {/* w-full sm:w-96 lg:w-1/4 sm:h-28 lg:h-14 */}
       <input
         type="email"
         placeholder="Email"
