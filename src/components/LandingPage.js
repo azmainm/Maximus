@@ -9,13 +9,13 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center bg-gray-900 text-white">
-      <h1 className="text-5xl font-bold mb-4">Welcome to FitArticles</h1>
-      <p className="text-lg mb-8">Your daily dose of fitness inspiration</p>
-      <button 
-        onClick={handleLoginClick} 
-        className="px-6 py-3 bg-blue-500 rounded-lg hover:bg-blue-700 transition">
-        Log In
+    <div className="h-screen flex flex-col justify-center items-center bg-black text-white font-poppins">
+      <h1 className="text-8xl font-bold mb-4 text-center">Shape Your</h1>
+      <p className="text-xl mb-8">Body. Mind. <span className='text-cyan-300'>Future.</span></p>
+      <button
+        onClick={handleLoginClick}
+        className="px-6 py-3 bg-black border border-white rounded-lg hover:bg-cyan-300 hover:scale-105 transition ease-in-out duration-300">
+        Breathe in
       </button>
     </div>
   );
