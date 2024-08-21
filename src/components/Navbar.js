@@ -34,7 +34,7 @@ const Navbar = () => {
           Create
         </span>
         <span 
-          onClick={() => router.push('/logout')}
+          onClick={() => router.push('/')}
           className="cursor-pointer hover:text-cyan-300 transition ease-in-out duration-200"
         >
           Log Out

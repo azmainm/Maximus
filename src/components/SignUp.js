@@ -8,10 +8,31 @@ const SignUp = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignUp = () => {
-    // Add sign-up logic here
-    router.push('/dashboard'); // Redirect to the dashboard after sign-up
+  const handleSignUp = async () => {
+    const res = await fetch("http://127.0.0.1:8000/signup/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        full_name: fullName,
+        email: email,
+        username: username,
+        password: password
+      })
+    });
+  
+    const data = await res.json();
+    if (res.ok) {
+      // Redirect to dashboard or login page after signup
+      router.push("/login");
+    } else {
+      // Show error message
+      console.error(data.detail);
+    }
   };
+  
+  
 
   return (
     <div className="h-screen flex flex-col justify-center items-center bg-black text-white font-poppins">
