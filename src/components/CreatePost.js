@@ -12,10 +12,9 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center bg-black text-white font-poppins">
-        <div className='border border-white rounded-lg h-screen flex flex-col justify-center items-center my-48 px-14'>
-      <h1 className="text-4xl font-bold mb-6 text-cyan-300">Post your Article</h1>
-      <label className="text-lg mb-2">What'd you call the article?</label>
+    <div className="h-screen w-screen flex flex-col justify-center items-center pb-4 bg-black text-white font-poppins">
+      <h1 className="text-4xl font-bold mt-20 mb-6 text-cyan-300">Post your Article</h1>
+      <label className="text-md mb-2">What do you call the article?</label>
       <input
         type="text"
         placeholder="Title"
@@ -23,7 +22,7 @@ const CreatePost = () => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <label className="text-lg mb-2">Describe your article in 2-3 sentences</label>
+      <label className="text-md mb-2">Describe your article in 2-3 sentences</label>
       <input
         type="text"
         placeholder="TLDR"
@@ -31,7 +30,7 @@ const CreatePost = () => {
         value={tldr}
         onChange={(e) => setTldr(e.target.value)}
       />
-      <label className="text-lg mb-2">Now, write your heart out</label>
+      <label className="text-md mb-2">Now, write your heart out</label>
       <textarea
         placeholder="Content"
         className="mb-6 p-3 w-80 h-40 rounded-sm text-black"
@@ -40,11 +39,10 @@ const CreatePost = () => {
       />
       <button 
         onClick={handlePost} 
-        className="px-6 py-3 mt-10 bg-black border border-white rounded-lg hover:bg-cyan-800 hover:scale-105 transition ease-in duration-200">
+        className="px-6 py-3 mt-4 bg-black border border-white rounded-lg hover:bg-cyan-800 hover:scale-105 transition ease-in duration-200">
         Post
       </button>
       </div>
-    </div>
   );
 };
 
