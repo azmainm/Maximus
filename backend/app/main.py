@@ -5,8 +5,13 @@ from pydantic import BaseModel
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from .db import get_db
-from .models import User
+from .models import User, Article
 from .utils import verify_password, hash_password
+from .schemas import ArticleCreate
+from .db import engine
+from .models import Base
+from fastapi.security import OAuth2PasswordBearer
+
 
 app = FastAPI()
 
@@ -15,10 +20,13 @@ SECRET_KEY = "bf54aa19e38de06204ba3af3ba99c208fbfb7176aa51eb2022673b0f4bd8cc04"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
+# OAuth2 scheme to retrieve token from the request header
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
 # Set up CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=["http://localhost:3000"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -90,6 +98,40 @@ async def login(login_data: LoginModel, db: Session = Depends(get_db)):
     access_token = create_access_token(data={"sub": user.username}, expires_delta=access_token_expires)
     
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+# Route to create an article
+@app.post("/createpost/")
+async def create_article(article_data: ArticleCreate, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    # Extract user information from the token
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        if username is None:
+            raise HTTPException(status_code=401, detail="Invalid credentials")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    user = db.query(User).filter(User.username == username).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Create a new article object with the user ID
+    new_article = Article(
+        title=article_data.title,
+        tldr=article_data.tldr,
+        content=article_data.content,
+        user_id=user.id  # Assign the user's ID
+    )
+
+    # Save the new article to the database
+    db.add(new_article)
+    db.commit()
+    db.refresh(new_article)
+
+    return {"message": "Article created successfully", "article_id": new_article.id}
+
+Base.metadata.create_all(bind=engine)
 
 if __name__ == "__main__":
     import uvicorn

@@ -14,7 +14,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen flex flex-col items-center bg-black text-white font-poppins p-4">
       {/* Profile Card */}
-      <div className="w-full max-w-4xl p-6 bg-black border border-cyan-300 rounded-md shadow-md mb-6">
+      <div className="w-full max-w-4xl p-6  bg-black border border-cyan-300 rounded-md shadow-md shadow-cyan-100 mb-6">
         <h1 className="text-3xl font-bold mb-4">Full Name</h1>
         <p className="text-lg mb-4">Email: <span className="text-cyan-300">email@example.com</span></p>
         <p className="text-md mb-4">Username: <span className="text-cyan-300">@username</span></p>

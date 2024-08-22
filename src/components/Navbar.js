@@ -15,6 +15,12 @@ const Navbar = () => {
 
       {/* Navigation Links */}
       <div className="flex space-x-6 text-sm">
+      <span 
+          onClick={() => router.push('/createpost')}
+          className="cursor-pointer hover:text-cyan-300 transition ease-in-out duration-200"
+        >
+          Create+
+        </span>
         <span 
           onClick={() => router.push('/article')}
           className="cursor-pointer hover:text-cyan-300 transition ease-in-out duration-200"
@@ -26,12 +32,6 @@ const Navbar = () => {
           className="cursor-pointer hover:text-cyan-300 transition ease-in-out duration-200"
         >
           Profile
-        </span>
-        <span 
-          onClick={() => router.push('/createpost')}
-          className="cursor-pointer hover:text-cyan-300 transition ease-in-out duration-200"
-        >
-          Create
         </span>
         <span 
           onClick={() => router.push('/')}

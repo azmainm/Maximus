@@ -9,3 +9,12 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     username = Column(String, unique=True, index=True)
     hashed_password = Column(String)
+
+class Article(Base):
+    __tablename__ = "articles"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True)
+    tldr = Column(String)
+    content = Column(String)
+    user_id = Column(Integer)
