@@ -116,12 +116,13 @@ async def create_article(article_data: ArticleCreate, db: Session = Depends(get_
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     
-    # Create a new article object with the user ID
+    # Create a new article object with the user ID and tags
     new_article = Article(
         title=article_data.title,
         tldr=article_data.tldr,
         content=article_data.content,
-        user_id=user.id  # Assign the user's ID
+        user_id=user.id,
+        tags=",".join(article_data.tags)  # Join tags as a comma-separated string
     )
 
     # Save the new article to the database

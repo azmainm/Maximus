@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import List
 
 class UserCreate(BaseModel):
     full_name: str
@@ -14,3 +15,4 @@ class ArticleCreate(BaseModel):
     title: str
     tldr: str
     content: str
+    tags: List[str]

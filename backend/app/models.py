@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 from .db import Base
 
 class User(Base):
@@ -17,4 +18,6 @@ class Article(Base):
     title = Column(String, index=True)
     tldr = Column(String)
     content = Column(String)
-    user_id = Column(Integer)
+    # user_id = Column(Integer)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    tags = Column(String)
