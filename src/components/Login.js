@@ -5,15 +5,39 @@ const Login = () => {
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleLogin = () => {
-    // Add login logic here
-    router.push('/dashboard'); // Redirect to the dashboard after login
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Invalid username or password');
+      }
+
+      const data = await response.json();
+      
+      // Save token in localStorage or cookies
+      localStorage.setItem('token', data.access_token);
+      
+      // Redirect to dashboard after successful login
+      router.push('/article');
+    } catch (error) {
+      setError(error.message);
+    }
   };
+
 
   return (
     <div className="h-screen flex flex-col justify-center items-center bg-black text-white font-poppins">
       <h1 className="text-4xl font-bold mb-6">Login</h1>
+      {error && <p className="text-red-500">{error}</p>}
       <input
         type="text"
         placeholder="Username"
@@ -29,8 +53,7 @@ const Login = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button 
-        // onClick={handleLogin} 
-        onClick={() => router.push('/createpost')} 
+        onClick={handleLogin} 
         className="px-6 py-3 bg-black border border-white rounded-lg hover:bg-cyan-800 hover:scale-105 transition ease-in duration-200">
         Log In
       </button>
