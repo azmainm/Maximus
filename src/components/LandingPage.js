@@ -16,7 +16,7 @@ const LandingPage = () => {
         <Image src={logo} alt="Logo" width={120} height={120} />
       </div>
       <h2 className="text-4xl font-medium mb-4 text-center">Shape Your</h2>
-      <h1 className="text-7xl font-bold mb-8">Body. Mind. <span className='text-cyan-300'>Future.</span></h1>
+      <h1 className="text-7xl text-center font-bold mb-8">Body. Mind. <span className='text-cyan-300'>Future.</span></h1>
       <button
         onClick={handleLoginClick}
         className="px-14 py-6 text-xl bg-black border border-white rounded-lg hover:bg-cyan-800 hover:scale-105 transition ease-in-out duration-300">

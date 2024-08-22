@@ -7,32 +7,40 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');  // State for displaying a message
 
   const handleSignUp = async () => {
-    const res = await fetch("http://127.0.0.1:8000/signup/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        full_name: fullName,
-        email: email,
-        username: username,
-        password: password
-      })
-    });
+    try {
+      const res = await fetch("http://127.0.0.1:8000/signup/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          full_name: fullName,
+          email: email,
+          username: username,
+          password: password,
+        }),
+      });
   
-    const data = await res.json();
-    if (res.ok) {
-      // Redirect to dashboard or login page after signup
-      router.push("/login");
-    } else {
-      // Show error message
-      console.error(data.detail);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+  
+      const data = await res.json();
+      console.log(data);
+      setMessage("Sign up successful! Redirecting to login...");
+      
+      // Redirect after 2 seconds
+      setTimeout(() => {
+        router.push('/login');
+      }, 2000);
+    } catch (error) {
+      console.error("Error:", error);
+      setMessage("Sign up failed. Please try again.");
     }
   };
-  
-  
 
   return (
     <div className="h-screen flex flex-col justify-center items-center bg-black text-white font-poppins">
@@ -44,7 +52,6 @@ const SignUp = () => {
         value={fullName}
         onChange={(e) => setFullName(e.target.value)}
       />
-      {/* w-full sm:w-96 lg:w-1/4 sm:h-28 lg:h-14 */}
       <input
         type="email"
         placeholder="Email"
@@ -71,6 +78,10 @@ const SignUp = () => {
         className="px-6 py-3 bg-black border border-white rounded-lg hover:bg-cyan-800 hover:scale-105 transition ease-in duration-200">
         Sign Up
       </button>
+
+      {/* Display success or error message */}
+      {message && <p className="mt-4 text-cyan-500">{message}</p>}
+
       <p className="mt-4">
         I am a member?{' '}
         <span 
