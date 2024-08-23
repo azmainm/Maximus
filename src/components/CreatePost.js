@@ -171,10 +171,10 @@ const CreatePost = () => {
           onClick={toggleDropdown}
           className="mb-4 px-4 py-2 bg-cyan-300 text-black rounded-md hover:bg-cyan-400"
         >
-          {dropdownOpen ? 'Close Tags' : 'Select Tags'}
+          {dropdownOpen ? 'Close' : 'Select Tags'}
         </button>
         {dropdownOpen && (
-          <div className="mb-4 p-3 w-full bg-gray-200 rounded-sm">
+          <div className="mb-4 p-3 w-full bg-black text-white rounded-sm border-green-400 shadow-sm shadow-cyan-400">
             {tags.map((tag, index) => (
               <div key={index} className="flex items-center">
                 <input
@@ -187,7 +187,7 @@ const CreatePost = () => {
               </div>
             ))}
           </div>
-        )}
+        )}<br></br>
         <button 
           onClick={handlePost} 
           className="px-6 py-3 mt-4 bg-black border border-white rounded-lg hover:bg-cyan-800 hover:scale-105 transition ease-in duration-200">

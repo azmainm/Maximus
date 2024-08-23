@@ -16,3 +16,15 @@ class ArticleCreate(BaseModel):
     tldr: str
     content: str
     tags: List[str]
+
+class ArticleResponse(BaseModel):
+    id: int
+    title: str
+    tldr: str
+    content: str
+    user_id: int
+    author_name: str
+    tags: List[str]
+    
+    class Config:
+        orm_mode = True

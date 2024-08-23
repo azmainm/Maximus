@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { FiArrowUpRight, FiFilter } from 'react-icons/fi';  
 import { Modal } from './Modal';  
 
@@ -8,16 +9,32 @@ const tags = [
   'Fitness Challenges', 'Personal Training', 'Fitness Goals', 
   'Transformations', 'Sports', 'Running', 
   'Swimming', 'Cycling', 'Sports Nutrition', 'Martial Arts',
-  'Muay Thai', 'MMA', 'Self-Defense', 'Marathon', 'Rope Jump',  'Yoga',
-   'Meditation', 'Mindfulness', 
-  'Mental Health', 'Stress', 'Mindfulness',  'Anxiety',  'Self-Care'
+  'Muay Thai', 'MMA', 'Self-Defense', 'Marathon', 'Rope Jump', 'Yoga',
+  'Meditation', 'Mindfulness', 'Mental Health', 'Stress', 'Anxiety', 'Self-Care'
 ];
 
 const Article = () => {
+  const [articles, setArticles] = useState([]);
+  const [selectedArticle, setSelectedArticle] = useState(null); // State to hold the selected article
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [modalContent, setModalContent] = useState({ title: '', description: '' });
+  const [modalContent, setModalContent] = useState({ title: '', tldr: '' });
   const [showDropdown, setShowDropdown] = useState(false);
+
+  // Fetch articles from the backend
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/article/');
+        setArticles(response.data);
+      } catch (error) {
+        console.error('Error fetching articles:', error);
+      }
+    };
+    fetchArticles();
+  }, []);
 
   const handleTagClick = (tag) => {
     if (selectedTags.includes(tag)) {
@@ -27,10 +44,22 @@ const Article = () => {
     }
   };
 
-  const openModal = (title, description) => {
-    setModalContent({ title, description });
+  const openModal = (article) => {
+    setModalContent({ 
+      title: article.title, 
+      tldr: article.tldr,
+      id: article.id
+    });
     setShowModal(true);
   };
+
+
+  // Filter and search logic
+  const filteredArticles = articles.filter(article => {
+    const matchesSearch = article.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesTags = selectedTags.length === 0 || selectedTags.some(tag => article.tags?.includes(tag));
+    return matchesSearch && matchesTags;
+  });
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-black text-white font-poppins p-4 relative">
@@ -38,6 +67,8 @@ const Article = () => {
       <div className="w-full max-w-4xl flex flex-col md:flex-row justify-center items-center mb-6">
         <input
           type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search..."
           className="p-2 w-2/3 rounded-md bg-black border border-cyan-300 text-white"
         />
@@ -70,28 +101,33 @@ const Article = () => {
 
       {/* Cards Layout */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-6xl z-10">
-        {Array.from({ length: 9 }).map((_, index) => (
-          <div
-            key={index}
-            className="relative p-4 rounded-md border border-cyan-300 bg-black shadow-md hover:shadow-cyan-300 hover:scale-105 transition ease-in-out duration-300"
-          >
-            <h3 className="text-xl font-bold mb-2">Card Title {index + 1}</h3>
-            <button
-              onClick={() => openModal(`Card Title ${index + 1}`, `This is the description of card ${index + 1}`)}
-              className="absolute top-2 right-2 bg-black text-white border border-cyan-300 rounded-full p-2 hover:bg-cyan-300 hover:text-black transition ease-in-out duration-200"
+        {filteredArticles.length > 0 ? (
+          filteredArticles.map(article => (
+            <div
+              key={article.id}
+              className="relative p-4 rounded-md border border-cyan-300 bg-black shadow-md hover:shadow-cyan-300 hover:scale-105 transition ease-in-out duration-300"
             >
-              <FiArrowUpRight />
-            </button>
-          </div>
-        ))}
+              <h3 className="text-xl font-bold mb-2">{article.title}</h3>
+              <button
+                onClick={() => openModal(article)}
+                className="absolute top-2 right-2 bg-black text-white border border-cyan-300 rounded-full p-2 hover:bg-cyan-300 hover:text-black transition ease-in-out duration-200"
+              >
+                <FiArrowUpRight />
+              </button>
+            </div>
+          ))
+        ) : (
+          <p>No articles found</p>
+        )}
       </div>
 
       {/* Modal */}
       {showModal && (
         <Modal
           title={modalContent.title}
-          description={modalContent.description}
+          tldr={modalContent.tldr}
           onClose={() => setShowModal(false)}
+          articleId={modalContent.id}  // Pass articleId to Modal
         />
       )}
     </div>

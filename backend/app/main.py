@@ -11,7 +11,8 @@ from .schemas import ArticleCreate
 from .db import engine
 from .models import Base
 from fastapi.security import OAuth2PasswordBearer
-
+from typing import List
+from .schemas import ArticleResponse  # Import the schema for the article response
 
 app = FastAPI()
 
@@ -131,6 +132,66 @@ async def create_article(article_data: ArticleCreate, db: Session = Depends(get_
     db.refresh(new_article)
 
     return {"message": "Article created successfully", "article_id": new_article.id}
+
+@app.get("/article/", response_model=List[ArticleResponse])
+async def get_articles(db: Session = Depends(get_db)):
+    # Join articles and users table to get author_name and user_id
+    articles = db.query(
+        Article.id,
+        Article.title,
+        Article.tldr,
+        Article.content,
+        Article.tags,
+        Article.user_id,  # Include user_id
+        User.full_name.label('author_name')
+    ).join(User, Article.user_id == User.id).all()
+
+    # Convert the query result to a list of dictionaries with the necessary fields
+    article_list = [
+        {
+            "id": article.id,
+            "title": article.title,
+            "tldr": article.tldr,
+            "content": article.content,
+            "tags": article.tags.split(','),  # Convert tags from string to list
+            "user_id": article.user_id,  # Add user_id to the response
+            "author_name": article.author_name
+        }
+        for article in articles
+    ]
+    
+    return article_list
+
+@app.get("/article/{article_id}", response_model=ArticleResponse)
+async def get_article(article_id: int, db: Session = Depends(get_db)):
+    # Join Article and User tables to get author_name and user_id
+    article = db.query(
+        Article.id,
+        Article.title,
+        Article.tldr,
+        Article.content,
+        Article.tags,
+        Article.user_id,  # Include user_id
+        User.full_name.label("author_name")
+    ).join(User, Article.user_id == User.id).filter(Article.id == article_id).first()
+
+    if not article:
+        raise HTTPException(status_code=404, detail="Article not found")
+
+    # Convert the article query result into a dictionary with the necessary fields
+    article_data = {
+        "id": article.id,
+        "title": article.title,
+        "tldr": article.tldr,
+        "content": article.content,
+        "tags": article.tags.split(','),  # Convert tags from string to list
+        "user_id": article.user_id,  # Add user_id to the response
+        "author_name": article.author_name
+    }
+    
+    return article_data
+
+
 
 Base.metadata.create_all(bind=engine)
 

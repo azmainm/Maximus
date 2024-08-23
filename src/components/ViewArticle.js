@@ -1,28 +1,37 @@
-import { useState } from 'react';
-import { Modal } from './Modal';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const ViewArticle = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [modalContent, setModalContent] = useState({ title: '', description: '' });
+  const [article, setArticle] = useState(null);
+  const router = useRouter();
+  const { articleId } = router.query;
 
-  const openModal = (title, description) => {
-    setModalContent({ title, description });
-    setShowModal(true);
-  };
+  useEffect(() => {
+    const fetchArticle = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/article/${articleId}`);
+        setArticle(response.data);
+      } catch (error) {
+        console.error('Error fetching article:', error);
+      }
+    };
+
+    if (articleId) {
+      fetchArticle();
+    }
+  }, [articleId]);
+
+  if (!article) return <div>Loading...</div>;
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-black text-white font-poppins p-4">
-      {/* Article Content */}
       <div className="w-full max-w-4xl p-6 bg-black border border-cyan-300 rounded-md shadow-md mb-6">
-        <h1 className="text-3xl font-bold mb-4">Article Title</h1>
-        <p className="text-lg mb-4">By <span className="text-cyan-300">Author Name</span></p>
-        <p className="text-sm text-gray-400 mb-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis cursus, velit in elementum scelerisque, urna lacus tempus quam, et scelerisque metus odio ut orci.</p>
-        <p className="text-md mb-6">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin imperdiet fermentum lacus, sed dignissim elit blandit a. Nulla eget eros ut nisi consequat faucibus. Aenean accumsan risus sit amet dolor placerat, nec feugiat leo faucibus. Pellentesque ut magna ante. Integer posuere, lorem nec sollicitudin vehicula, elit ex eleifend lacus, ac auctor metus tortor nec nisi. Maecenas condimentum risus orci, et posuere odio blandit ut...
-        </p>
+        <h1 className="text-3xl font-bold mb-4">{article.title}</h1>
+        <p className="text-lg mb-4">By <span className="text-cyan-300">{article.author_name}</span></p>
+        <p className="text-sm text-gray-400 mb-6">{article.tldr}</p>
+        <p className="text-md mb-6">{article.content}</p>
       </div>
-
-     
     </div>
   );
 };
