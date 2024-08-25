@@ -141,60 +141,62 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center mb-0 bg-black text-white font-poppins">
-      <div className="max-w-lg p-6 bg-black rounded-lg shadow-lg shadow-cyan-300">
-        <h1 className="text-4xl font-bold mt-20 mb-6 text-cyan-300">Post your Article</h1>
-        <label className="text-md mb-2">What do you call the article?</label>
-        <input
-          type="text"
-          placeholder="Title"
-          className="mb-4 p-3 w-full rounded-sm text-black"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <label className="text-md mb-2">Describe your article in 2-3 sentences</label>
-        <input
-          type="text"
-          placeholder="TLDR"
-          className="mb-4 p-3 w-full rounded-sm text-black"
-          value={tldr}
-          onChange={(e) => setTldr(e.target.value)}
-        />
-        <label className="text-md mb-2">Now, write your heart out</label>
-        <textarea
-          placeholder="Content"
-          className="mb-6 p-3 w-full h-40 rounded-sm text-black"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-        <button
-          onClick={toggleDropdown}
-          className="mb-4 px-4 py-2 bg-cyan-300 text-black rounded-md hover:bg-cyan-400"
-        >
-          {dropdownOpen ? 'Close' : 'Select Tags'}
-        </button>
-        {dropdownOpen && (
-          <div className="mb-4 p-3 w-full bg-black text-white rounded-sm border-green-400 shadow-sm shadow-cyan-400">
-            {tags.map((tag, index) => (
-              <div key={index} className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={selectedTags.includes(tag)}
-                  onChange={() => handleTagSelection(tag)}
-                  className="mr-2"
-                />
-                <label>{tag}</label>
-              </div>
-            ))}
+    <div className="flex flex-col justify-center items-center min-h-screen bg-black text-white font-poppins">
+  <div className="max-w-lg p-6 bg-black rounded-lg shadow-lg shadow-cyan-300 w-full md:w-auto">
+    <h1 className="text-4xl font-bold mt-8 mb-6 text-cyan-300 text-center">Post your Article</h1>
+    <label className="text-md mb-2">What do you call the article?</label>
+    <input
+      type="text"
+      placeholder="Title"
+      className="mb-4 p-3 w-full rounded-sm text-black"
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+    />
+    <label className="text-md mb-2">Describe your article in 2-3 sentences</label>
+    <input
+      type="text"
+      placeholder="TLDR"
+      className="mb-4 p-3 w-full rounded-sm text-black"
+      value={tldr}
+      onChange={(e) => setTldr(e.target.value)}
+    />
+    <label className="text-md mb-2">Now, write your heart out</label>
+    <textarea
+      placeholder="Content"
+      className="mb-6 p-3 w-full h-40 rounded-sm text-black"
+      value={content}
+      onChange={(e) => setContent(e.target.value)}
+    />
+    <button
+      onClick={toggleDropdown}
+      className="mb-4 px-4 py-2 bg-cyan-300 text-black rounded-md hover:bg-cyan-400"
+    >
+      {dropdownOpen ? 'Close' : 'Select Tags'}
+    </button>
+    {dropdownOpen && (
+      <div className="mb-4 p-3 w-full bg-black text-white rounded-sm border-green-400 shadow-sm shadow-cyan-400">
+        {tags.map((tag, index) => (
+          <div key={index} className="flex items-center">
+            <input
+              type="checkbox"
+              checked={selectedTags.includes(tag)}
+              onChange={() => handleTagSelection(tag)}
+              className="mr-2"
+            />
+            <label>{tag}</label>
           </div>
-        )}<br></br>
-        <button 
-          onClick={handlePost} 
-          className="px-6 py-3 mt-4 bg-black border border-white rounded-lg hover:bg-cyan-800 hover:scale-105 transition ease-in duration-200">
-          Post
-        </button>
+        ))}
       </div>
-    </div>
+    )}
+    <br />
+    <button 
+      onClick={handlePost} 
+      className="px-6 py-3 mt-4 bg-black border border-white rounded-lg hover:bg-cyan-800 hover:scale-105 transition ease-in duration-200">
+      Post
+    </button>
+  </div>
+</div>
+
   );
 };
 

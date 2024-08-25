@@ -64,13 +64,13 @@ const Article = () => {
   return (
     <div className="min-h-screen flex flex-col items-center bg-black text-white font-poppins p-4 relative">
       {/* Search and Filter */}
-      <div className="w-full max-w-4xl flex flex-col md:flex-row justify-center items-center mb-6">
+      <div className="w-full max-w-4xl flex justify-between items-center mb-6">
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search..."
-          className="p-2 w-2/3 rounded-md bg-black border border-cyan-300 text-white"
+          className="p-2 flex-grow rounded-md bg-black border border-cyan-300 text-white"
         />
         <button
           onClick={() => setShowDropdown(!showDropdown)}
@@ -82,13 +82,13 @@ const Article = () => {
 
       {/* Tag Filters Dropdown */}
       {showDropdown && (
-        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 bg-black border border-cyan-300 p-4 rounded-md shadow-lg z-50">
+        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 bg-black border border-cyan-300 p-4 rounded-md shadow-lg z-50 w-11/12 max-w-md md:max-w-xl">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {tags.map((tag, index) => (
               <button
                 key={index}
                 onClick={() => handleTagClick(tag)}
-                className={`p-2 rounded-full border border-cyan-300 text-sm hover:bg-cyan-800 transition ease-in-out duration-200 ${
+                className={`p-2 rounded-full border border-cyan-300 text-sm hover:bg-cyan-800 transition ease-in-out duration-200 whitespace-nowrap text-center ${
                   selectedTags.includes(tag) ? 'bg-cyan-300 text-black' : ''
                 }`}
               >

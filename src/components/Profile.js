@@ -47,10 +47,10 @@ const Profile = () => {
     <div className="min-h-screen flex flex-col items-center bg-black text-white font-poppins p-4">
       {/* Top Card with User Information */}
       <div className="w-full max-w-4xl p-6 mb-6 bg-black border border-cyan-200 rounded-md shadow-md">
-        <h1 className="text-3xl font-bold mb-2"><span className='text-cyan-200'>Full Name: </span>{userInfo.full_name}</h1>
-        <p className="text-lg mb-2"><span className='text-cyan-200'>Email: </span>{userInfo.email}</p>
-        <p className="text-lg mb-2"><span className='text-cyan-200'>Username: </span>{userInfo.username}</p>
-        <p className="text-lg font-bold"><span className='text-cyan-200'>Total Posted Articles: </span>{userInfo.total_articles}</p>
+        <h1 className="text-3xl font-bold mb-2"><span className='text-cyan-200'>{userInfo.full_name}</span></h1>
+        <p className="text-md mb-2"><span className='text-cyan-100'>Email: </span>{userInfo.email}</p>
+        <p className="text-md mb-2"><span className='text-cyan-100'>Username: </span>{userInfo.username}</p>
+        <p className="text-md font-bold"><span className='text-cyan-100'>Total Posted Articles: </span>{userInfo.total_articles}</p>
       </div>
 
       {/* Cards with User's Posted Articles */}
