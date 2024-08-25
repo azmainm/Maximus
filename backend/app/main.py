@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Depends, HTTPException, APIRouter
+
+from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
@@ -140,17 +141,25 @@ async def create_article(article_data: ArticleCreate, db: Session = Depends(get_
     return {"message": "Article created successfully", "article_id": new_article.id}
 
 @app.get("/article/", response_model=List[ArticleResponse])
-async def get_articles(db: Session = Depends(get_db)):
-    # Join articles and users table to get author_name and user_id
-    articles = db.query(
+async def get_articles(db: Session = Depends(get_db), tags: List[str] = Query(None)):
+    # Base query to join articles and users table
+    query = db.query(
         Article.id,
         Article.title,
         Article.tldr,
         Article.content,
         Article.tags,
-        Article.user_id,  # Include user_id
+        Article.user_id,  
         User.full_name.label('author_name')
-    ).join(User, Article.user_id == User.id).all()
+    ).join(User, Article.user_id == User.id)
+
+    # If tags are provided, filter the articles
+    if tags:
+        for tag in tags:
+            query = query.filter(Article.tags.ilike(f"%{tag}%"))
+
+    # Execute the query and fetch results
+    articles = query.all()
 
     # Convert the query result to a list of dictionaries with the necessary fields
     article_list = [
@@ -160,13 +169,14 @@ async def get_articles(db: Session = Depends(get_db)):
             "tldr": article.tldr,
             "content": article.content,
             "tags": article.tags.split(','),  # Convert tags from string to list
-            "user_id": article.user_id,  # Add user_id to the response
+            "user_id": article.user_id,
             "author_name": article.author_name
         }
         for article in articles
     ]
     
     return article_list
+
 
 @app.get("/article/{article_id}", response_model=ArticleResponse)
 async def get_article(article_id: int, db: Session = Depends(get_db)):
@@ -177,7 +187,7 @@ async def get_article(article_id: int, db: Session = Depends(get_db)):
         Article.tldr,
         Article.content,
         Article.tags,
-        Article.user_id,  # Include user_id
+        Article.user_id,  
         User.full_name.label("author_name")
     ).join(User, Article.user_id == User.id).filter(Article.id == article_id).first()
 
@@ -196,6 +206,37 @@ async def get_article(article_id: int, db: Session = Depends(get_db)):
     }
     
     return article_data
+
+@app.get("/profile/{user_id}")
+def get_user_profile(user_id: int, db: Session = Depends(get_db)):
+    # Fetch user details
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        return {"error": "User not found"}
+    
+    # Count total articles by this user
+    total_articles = db.query(Article).filter(Article.user_id == user_id).count()
+    
+    # Fetch all articles by this user
+    articles = db.query(Article).filter(Article.user_id == user_id).all()
+    
+    return {
+        "full_name": user.full_name,
+        "email": user.email,
+        "username": user.username,
+        "total_articles": total_articles,
+        "articles": [{"title": article.title, "tldr": article.tldr, "id": article.id} for article in articles]
+    }
+
+
+Base.metadata.create_all(bind=engine)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000, reload=True)
+
+
+
 
 @app.get("/profile/{user_id}")
 def get_user_profile(user_id: int, db: Session = Depends(get_db)):

@@ -23,18 +23,23 @@ const Article = () => {
   const [modalContent, setModalContent] = useState({ title: '', tldr: '' });
   const [showDropdown, setShowDropdown] = useState(false);
 
-  // Fetch articles from the backend
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/article/');
+        const params = new URLSearchParams();
+        if (selectedTags.length > 0) {
+          selectedTags.forEach(tag => params.append('tags', tag));
+        }
+        
+        const response = await axios.get('http://127.0.0.1:8000/article/', { params });
         setArticles(response.data);
       } catch (error) {
         console.error('Error fetching articles:', error);
       }
     };
     fetchArticles();
-  }, []);
+  }, [selectedTags]);
+  
 
   const handleTagClick = (tag) => {
     if (selectedTags.includes(tag)) {
@@ -55,11 +60,11 @@ const Article = () => {
 
 
   // Filter and search logic
-  const filteredArticles = articles.filter(article => {
-    const matchesSearch = article.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesTags = selectedTags.length === 0 || selectedTags.some(tag => article.tags?.includes(tag));
-    return matchesSearch && matchesTags;
-  });
+  // const filteredArticles = articles.filter(article => {
+  //   const matchesSearch = article.title.toLowerCase().includes(searchQuery.toLowerCase());
+  //   const matchesTags = selectedTags.length === 0 || selectedTags.some(tag => article.tags?.includes(tag));
+  //   return matchesSearch && matchesTags;
+  // });
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-black text-white font-poppins p-4 relative">
@@ -101,8 +106,8 @@ const Article = () => {
 
       {/* Cards Layout */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-6xl z-10">
-        {filteredArticles.length > 0 ? (
-          filteredArticles.map(article => (
+        {articles.length > 0 ? (
+          articles.map(article => (
             <div
               key={article.id}
               className="relative p-4 rounded-md border border-cyan-300 bg-black shadow-md hover:shadow-cyan-300 hover:scale-105 transition ease-in-out duration-300"
@@ -127,7 +132,7 @@ const Article = () => {
           title={modalContent.title}
           tldr={modalContent.tldr}
           onClose={() => setShowModal(false)}
-          articleId={modalContent.id}  // Pass articleId to Modal
+          articleId={modalContent.id}
         />
       )}
     </div>
