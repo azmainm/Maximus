@@ -10,6 +10,7 @@ class UserCreate(BaseModel):
 class UserLogin(BaseModel):
     username: str
     password: str
+    userID: int
 
 class ArticleCreate(BaseModel):
     title: str

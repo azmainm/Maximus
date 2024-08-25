@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
@@ -12,9 +12,10 @@ from .db import engine
 from .models import Base
 from fastapi.security import OAuth2PasswordBearer
 from typing import List
-from .schemas import ArticleResponse  # Import the schema for the article response
+from .schemas import ArticleResponse  
 
 app = FastAPI()
+# router = APIRouter()
 
 # Secret key for JWT encoding/decoding
 SECRET_KEY = "bf54aa19e38de06204ba3af3ba99c208fbfb7176aa51eb2022673b0f4bd8cc04" 
@@ -98,7 +99,12 @@ async def login(login_data: LoginModel, db: Session = Depends(get_db)):
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(data={"sub": user.username}, expires_delta=access_token_expires)
     
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user_id": user.id  
+    }
+
 
 
 # Route to create an article
@@ -191,6 +197,26 @@ async def get_article(article_id: int, db: Session = Depends(get_db)):
     
     return article_data
 
+@app.get("/profile/{user_id}")
+def get_user_profile(user_id: int, db: Session = Depends(get_db)):
+    # Fetch user details
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        return {"error": "User not found"}
+    
+    # Count total articles by this user
+    total_articles = db.query(Article).filter(Article.user_id == user_id).count()
+    
+    # Fetch all articles by this user
+    articles = db.query(Article).filter(Article.user_id == user_id).all()
+    
+    return {
+        "full_name": user.full_name,
+        "email": user.email,
+        "username": user.username,
+        "total_articles": total_articles,
+        "articles": [{"title": article.title, "tldr": article.tldr, "id": article.id} for article in articles]
+    }
 
 
 Base.metadata.create_all(bind=engine)

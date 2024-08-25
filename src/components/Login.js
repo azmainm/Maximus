@@ -16,16 +16,19 @@ const Login = () => {
         },
         body: JSON.stringify({ username, password }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Invalid username or password');
       }
-
+  
       const data = await response.json();
       
-      // Save token in localStorage or cookies
+      // Save token and user ID in localStorage
       localStorage.setItem('token', data.access_token);
-      
+      localStorage.setItem('username', username);
+      localStorage.setItem('user_id', data.user_id);  
+      console.log("User ID:",data.user_id)
+  
       // Redirect to dashboard after successful login
       router.push('/article');
     } catch (error) {
