@@ -30,7 +30,9 @@ const Article = () => {
         if (selectedTags.length > 0) {
           selectedTags.forEach(tag => params.append('tags', tag));
         }
-        
+        if (searchQuery) {
+          params.append('search_query', searchQuery);
+        }
         const response = await axios.get('http://127.0.0.1:8000/article/', { params });
         setArticles(response.data);
       } catch (error) {
@@ -38,7 +40,7 @@ const Article = () => {
       }
     };
     fetchArticles();
-  }, [selectedTags]);
+  }, [selectedTags, searchQuery]);
   
 
   const handleTagClick = (tag) => {
@@ -58,13 +60,6 @@ const Article = () => {
     setShowModal(true);
   };
 
-
-  // Filter and search logic
-  // const filteredArticles = articles.filter(article => {
-  //   const matchesSearch = article.title.toLowerCase().includes(searchQuery.toLowerCase());
-  //   const matchesTags = selectedTags.length === 0 || selectedTags.some(tag => article.tags?.includes(tag));
-  //   return matchesSearch && matchesTags;
-  // });
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-black text-white font-poppins p-4 relative">

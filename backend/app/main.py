@@ -14,6 +14,7 @@ from .models import Base
 from fastapi.security import OAuth2PasswordBearer
 from typing import List
 from .schemas import ArticleResponse  
+from sqlalchemy import or_
 
 app = FastAPI()
 # router = APIRouter()
@@ -141,7 +142,8 @@ async def create_article(article_data: ArticleCreate, db: Session = Depends(get_
     return {"message": "Article created successfully", "article_id": new_article.id}
 
 @app.get("/article/", response_model=List[ArticleResponse])
-async def get_articles(db: Session = Depends(get_db), tags: List[str] = Query(None)):
+async def get_articles(db: Session = Depends(get_db), tags: List[str] = Query(None), search_query: str = None):
+    
     # Base query to join articles and users table
     query = db.query(
         Article.id,
@@ -152,6 +154,16 @@ async def get_articles(db: Session = Depends(get_db), tags: List[str] = Query(No
         Article.user_id,  
         User.full_name.label('author_name')
     ).join(User, Article.user_id == User.id)
+
+    # If search query is provided, filter based on title, author, or tags
+    if search_query:
+        query = query.filter(
+            or_(
+                Article.title.ilike(f"%{search_query}%"),
+                User.full_name.ilike(f"%{search_query}%"),
+                Article.tags.ilike(f"%{search_query}%")
+            )
+        )
 
     # If tags are provided, filter the articles
     if tags:
