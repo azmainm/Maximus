@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { motion } from 'framer-motion';
 
 const SignUp = () => {
   const router = useRouter();
@@ -8,6 +9,7 @@ const SignUp = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');  // State for displaying a message
+  const [IsSigningUp, setIsSigningUp] = useState(false);
 
   const handleSignUp = async () => {
     try {
@@ -29,8 +31,13 @@ const SignUp = () => {
       }
   
       const data = await res.json();
+
       console.log(data);
-      setMessage("Sign up successful! Redirecting to login...");
+
+      // Trigger the animation and set the Signup state
+      setIsSigningUp(true);
+
+      // setMessage("Sign up successful! Redirecting to login...");
       
       // Redirect after 2 seconds
       setTimeout(() => {
@@ -73,11 +80,14 @@ const SignUp = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button 
+      <motion.button 
         onClick={handleSignUp} 
-        className="px-6 py-3 bg-black border border-white rounded-lg hover:bg-cyan-800 hover:scale-105 transition ease-in duration-200">
+        className="px-6 py-3 bg-black border border-white rounded-lg hover:bg-cyan-800 hover:scale-105 transition ease-in duration-200"
+        animate={IsSigningUp ? { scale: 1.2, rotate: 360 } : {}}
+        transition={{ duration: 0.5, ease: 'easeInOut' }}
+        >
         Sign Up
-      </button>
+      </motion.button>
 
       {/* Display success or error message */}
       {message && <p className="mt-4 text-cyan-500">{message}</p>}
