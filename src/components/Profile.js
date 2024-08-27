@@ -23,7 +23,7 @@ const Profile = () => {
         }
 
         // Fetch user profile and articles using the user_id from localStorage
-        const response = await axios.get(`http://127.0.0.1:8000/profile/${user_id}`);
+        const response = await axios.get(`https://maximus-ur9l.onrender.com/profile/${user_id}`);
         const { full_name, email, username, total_articles, articles } = response.data;
 
         // Set user profile info
@@ -31,7 +31,7 @@ const Profile = () => {
         setUserArticles(articles);
 
         // Fetch favorite articles
-      const favoriteArticlesResponse = await axios.get(`http://127.0.0.1:8000/favorite_articles/${user_id}`);
+      const favoriteArticlesResponse = await axios.get(`https://maximus-ur9l.onrender.com/favorite_articles/${user_id}`);
       setFavoriteArticles(favoriteArticlesResponse.data);
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -56,7 +56,7 @@ const Profile = () => {
       const token = localStorage.getItem('token');
   
       // Send a request to the backend to delete the article with the token in the headers
-      await axios.delete(`http://127.0.0.1:8000/delete_article/${articleId}`, {
+      await axios.delete(`https://maximus-ur9l.onrender.com/delete_article/${articleId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
