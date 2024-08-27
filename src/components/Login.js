@@ -8,6 +8,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const handleLogin = async () => {
     try {
@@ -20,7 +21,7 @@ const Login = () => {
       });
   
       if (!response.ok) {
-        throw new Error('Invalid username or password');
+        throw new Error('');
       }
   
       const data = await response.json();
@@ -40,6 +41,7 @@ const Login = () => {
       }, 1000); // Adjust the timing to match the animation duration
     } catch (error) {
       setError(error.message);
+      setShowErrorModal(true);
     }
   };
 
@@ -66,8 +68,8 @@ const Login = () => {
       <motion.button
         onClick={handleLogin}
         className="px-6 py-3 bg-black border border-white rounded-lg hover:bg-cyan-800 hover:scale-105 transition ease-in duration-200"
-        animate={isLoggingIn ? { scale: 1.2, rotate: 360 } : {}}
-        transition={{ duration: 0.5, ease: 'easeInOut' }}
+        animate={isLoggingIn ? { scale: 1.2, rotate: 10 } : {}}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
       >
         Log In
       </motion.button>
@@ -90,6 +92,22 @@ const Login = () => {
           Home
         </span>
       </p>
+
+      {/* Error Modal */}
+    {showErrorModal && (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50">
+        <div className="relative w-11/12 md:w-1/2 lg:w-1/3 p-6 bg-black border border-cyan-300 rounded-lg shadow-lg text-white">
+          <h2 className="text-2xl font-bold mb-4 text-red-400">Login Error!</h2>
+          <p className="mb-6">Invalid username or password.</p>
+          <button
+            onClick={() => setShowErrorModal(false)}
+            className="px-6 py-2 bg-black border border-cyan-300 rounded-lg hover:bg-cyan-800 transition ease-in-out duration-200"
+          >
+            Okay
+          </button>
+        </div>
+      </div>
+    )}
     </div>
   );
 };
