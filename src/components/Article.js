@@ -33,7 +33,7 @@ const Article = () => {
         if (searchQuery) {
           params.append('search_query', searchQuery);
         }
-        const response = await axios.get('http://127.0.0.1:8000/article/', { params });
+        const response = await axios.get('https://maximus-ur9l.onrender.com/article/', { params });
         setArticles(response.data);
       } catch (error) {
         console.error('Error fetching articles:', error);
