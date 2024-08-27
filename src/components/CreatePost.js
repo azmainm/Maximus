@@ -41,7 +41,7 @@ const CreatePost = () => {
   const handlePost = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://127.0.0.1:8000/createpost/', {
+      const response = await axios.post('https://maximus-ur9l.onrender.com/createpost/', {
         title,
         tldr,
         content,
