@@ -13,7 +13,7 @@ const ViewArticle = () => {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/article/${articleId}`);
+        const response = await axios.get(`https://maximus-ur9l.onrender.com/article/${articleId}`);
         setArticle(response.data);
         checkIfFavorited(response.data.user_id);
       } catch (error) {
@@ -29,7 +29,7 @@ const ViewArticle = () => {
   const checkIfFavorited = async () => {
     try {
       const userId = localStorage.getItem('user_id'); // Get user_id from local storage
-      const response = await axios.post('http://127.0.0.1:8000/is_favorited/', {
+      const response = await axios.post('https://maximus-ur9l.onrender.com/is_favorited/', {
         user_id: userId,
         article_id: articleId,
       });
@@ -43,7 +43,7 @@ const ViewArticle = () => {
   const toggleFavorite = async () => {
     try {
       const userId = localStorage.getItem('user_id'); // Get user_id from local storage
-      await axios.post('http://127.0.0.1:8000/favorite/', {
+      await axios.post('https://maximus-ur9l.onrender.com/favorite/', {
         user_id: userId,
         article_id: articleId,
       });
