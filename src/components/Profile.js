@@ -8,6 +8,7 @@ const Profile = () => {
   const [userArticles, setUserArticles] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState({ title: '', tldr: '', id: '' });
+  const [favoriteArticles, setFavoriteArticles] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -26,10 +27,14 @@ const Profile = () => {
         // Set user profile info
         setUserInfo({ full_name, email, username, total_articles });
         setUserArticles(articles);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
+
+        // Fetch favorite articles
+      const favoriteArticlesResponse = await axios.get(`http://127.0.0.1:8000/favorite_articles/${user_id}`);
+      setFavoriteArticles(favoriteArticlesResponse.data);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
 
     fetchUserData();
   }, []); // Run only once when the component loads
@@ -78,26 +83,26 @@ const Profile = () => {
 
       {/* Cards with User's Favorite Articles */}
       <h1 className='font-poppins font-semibold text-lg mb-4 mt-6'>Favorite Articles</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-6xl">
-        {userArticles.length > 0 ? (
-          userArticles.map((article) => (
-            <div
-              key={article.id}
-              className="relative p-4 rounded-md border border-cyan-300 bg-black shadow-md hover:shadow-cyan-300 hover:scale-105 transition ease-in-out duration-300"
-            >
-              <h3 className="text-xl font-bold mb-2">{article.title}</h3>
-              <button
-                onClick={() => openModal(article)}
-                className="absolute top-2 right-2 bg-black text-white border border-cyan-300 rounded-full p-2 hover:bg-cyan-300 hover:text-black transition ease-in-out duration-200"
-              >
-                <FiArrowUpRight />
-              </button>
-            </div>
-          ))
-        ) : (
-          <p>No articles posted yet.</p>
-        )}
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-6xl">
+  {favoriteArticles.length > 0 ? (
+    favoriteArticles.map((article) => (
+      <div
+        key={article.id}
+        className="relative p-4 rounded-md border border-cyan-300 bg-black shadow-md hover:shadow-cyan-300 hover:scale-105 transition ease-in-out duration-300"
+      >
+        <h3 className="text-xl font-bold mb-2">{article.title}</h3>
+        <button
+          onClick={() => openModal(article)}
+          className="absolute top-2 right-2 bg-black text-white border border-cyan-300 rounded-full p-2 hover:bg-cyan-300 hover:text-black transition ease-in-out duration-200"
+        >
+          <FiArrowUpRight />
+        </button>
       </div>
+    ))
+  ) : (
+    <p>No favorite articles yet.</p>
+  )}
+</div>
 
 
       {/* Modal */}
@@ -106,7 +111,7 @@ const Profile = () => {
           title={modalContent.title}
           tldr={modalContent.tldr}
           onClose={() => setShowModal(false)}
-          articleId={modalContent.id}  // Pass articleId to Modal
+          articleId={modalContent.id}
         />
       )}
     </div>

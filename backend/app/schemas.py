@@ -29,3 +29,12 @@ class ArticleResponse(BaseModel):
     
     class Config:
         orm_mode = True
+
+class FavoriteCheck(BaseModel):
+    user_id: int
+    article_id: int
+
+class FavoriteToggle(BaseModel):
+    user_id: int
+    article_id: int
+

@@ -15,6 +15,7 @@ const ViewArticle = () => {
       try {
         const response = await axios.get(`http://127.0.0.1:8000/article/${articleId}`);
         setArticle(response.data);
+        checkIfFavorited(response.data.user_id);
       } catch (error) {
         console.error('Error fetching article:', error);
       }
@@ -25,11 +26,35 @@ const ViewArticle = () => {
     }
   }, [articleId]);
 
-  if (!article) return <div>Loading...</div>;
-
-  const toggleFavorite = () => {
-    setIsFavorited(!isFavorited);
+  const checkIfFavorited = async () => {
+    try {
+      const userId = localStorage.getItem('user_id'); // Get user_id from local storage
+      const response = await axios.post('http://127.0.0.1:8000/is_favorited/', {
+        user_id: userId,
+        article_id: articleId,
+      });
+      setIsFavorited(response.data.is_favorited);
+    } catch (error) {
+      console.error('Error checking if article is favorited:', error);
+    }
   };
+  
+
+  const toggleFavorite = async () => {
+    try {
+      const userId = localStorage.getItem('user_id'); // Get user_id from local storage
+      await axios.post('http://127.0.0.1:8000/favorite/', {
+        user_id: userId,
+        article_id: articleId,
+      });
+      setIsFavorited(!isFavorited);
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
+  };
+  
+
+  if (!article) return <div>Loading...</div>;
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-black text-white font-poppins p-4">
@@ -38,18 +63,18 @@ const ViewArticle = () => {
           <h1 className="text-3xl font-bold">{article.title}</h1>
           {/* Favorite Icon */}
           <button onClick={toggleFavorite} aria-label="Favorite">
-            <FontAwesomeIcon
-              icon={faHeart}
-              className={`transition-all duration-300 ${
-                isFavorited ? 'text-red-700' : 'text-cyan-300'
-              }`}
-              style={{
-                borderRadius: '50%',
-                padding: '0.5rem',
-                fontSize: '1.5rem'
-              }}
-            />
-          </button>
+      <FontAwesomeIcon
+        icon={faHeart}
+        className={`transition-all duration-300 ${
+          isFavorited ? 'text-red-700' : 'text-cyan-300'
+        }`}
+        style={{
+          borderRadius: '50%',
+          padding: '0.5rem',
+          fontSize: '1.5rem'
+        }}
+      />
+    </button>
         </div>
         <p className="text-lg mb-4">By <span className="text-cyan-300">{article.author_name}</span></p>
         <p className="text-sm text-gray-400 mb-6">{article.tldr}</p>

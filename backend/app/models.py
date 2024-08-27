@@ -1,6 +1,13 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from .db import Base
+
+favorites = Table(
+    'favorites',
+    Base.metadata,
+    Column('user_id', Integer, ForeignKey('users.id')),
+    Column('article_id', Integer, ForeignKey('articles.id'))
+)
 
 class User(Base):
     __tablename__ = "users"
@@ -11,6 +18,9 @@ class User(Base):
     username = Column(String, unique=True, index=True)
     hashed_password = Column(String)
 
+    favorited_articles = relationship("Article", secondary=favorites, back_populates="favorites")
+
+
 class Article(Base):
     __tablename__ = "articles"
 
@@ -18,6 +28,8 @@ class Article(Base):
     title = Column(String, index=True)
     tldr = Column(String)
     content = Column(String)
-    # user_id = Column(Integer)
     user_id = Column(Integer, ForeignKey("users.id"))
     tags = Column(String)
+
+    favorites = relationship("User", secondary=favorites, back_populates="favorited_articles")
+

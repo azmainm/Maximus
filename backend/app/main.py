@@ -5,8 +5,9 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
+from . import models, schemas, db
 from .db import get_db
-from .models import User, Article
+from .models import User, Article, favorites
 from .utils import verify_password, hash_password
 from .schemas import ArticleCreate
 from .db import engine
@@ -232,48 +233,72 @@ def get_user_profile(user_id: int, db: Session = Depends(get_db)):
     # Fetch all articles by this user
     articles = db.query(Article).filter(Article.user_id == user_id).all()
     
-    return {
-        "full_name": user.full_name,
-        "email": user.email,
-        "username": user.username,
-        "total_articles": total_articles,
-        "articles": [{"title": article.title, "tldr": article.tldr, "id": article.id} for article in articles]
-    }
 
-
-Base.metadata.create_all(bind=engine)
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000, reload=True)
-
-
-
-
-@app.get("/profile/{user_id}")
-def get_user_profile(user_id: int, db: Session = Depends(get_db)):
-    # Fetch user details
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        return {"error": "User not found"}
-    
-    # Count total articles by this user
-    total_articles = db.query(Article).filter(Article.user_id == user_id).count()
-    
-    # Fetch all articles by this user
-    articles = db.query(Article).filter(Article.user_id == user_id).all()
     
     return {
         "full_name": user.full_name,
         "email": user.email,
         "username": user.username,
         "total_articles": total_articles,
-        "articles": [{"title": article.title, "tldr": article.tldr, "id": article.id} for article in articles]
+        "articles": [{"title": article.title, "tldr": article.tldr, "id": article.id} for article in articles],
+        
     }
 
 
+# Endpoint to check if an article is favorited by a user
+@app.post("/is_favorited/")
+async def is_favorited(data: schemas.FavoriteCheck, db: Session = Depends(get_db)):
+    user_id = data.user_id
+    article_id = data.article_id
+
+    # Check if the article is favorited by the user
+    is_favorited = db.query(favorites).filter(
+        favorites.c.user_id == user_id,
+        favorites.c.article_id == article_id
+    ).first() is not None
+
+    return {"is_favorited": is_favorited}
+
+# Endpoint to add or remove an article from favorites
+@app.post("/favorite/")
+async def favorite(data: schemas.FavoriteToggle, db: Session = Depends(get_db)):
+    user_id = data.user_id
+    article_id = data.article_id
+
+    # Check if the article is already favorited by the user
+    is_favorited = db.query(favorites).filter(
+        favorites.c.user_id == user_id,
+        favorites.c.article_id == article_id
+    ).first() is not None
+
+    if is_favorited:
+        # Remove the article from favorites
+        db.query(favorites).filter(
+            favorites.c.user_id == user_id,
+            favorites.c.article_id == article_id
+        ).delete()
+    else:
+        # Add the article to favorites
+        db.execute(
+            favorites.insert().values(user_id=user_id, article_id=article_id)
+        )
+
+    db.commit()
+
+    return {"message": "Favorite status updated"}
+
+@app.get("/favorite_articles/{user_id}")
+def get_favorite_articles(user_id: int, db: Session = Depends(get_db)):
+    # Fetch favorite articles for the user
+    favorite_articles = db.query(Article).join(favorites).filter(favorites.c.user_id == user_id).all()
+
+    return [{"title": article.title, "tldr": article.tldr, "id": article.id} for article in favorite_articles]
+
+
+# Create tables on app start
 Base.metadata.create_all(bind=engine)
 
+# Run the FastAPI application
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000, reload=True)

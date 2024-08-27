@@ -91,7 +91,7 @@ const LandingPage = () => {
       {/* Button Animation */}
       <motion.button
         onClick={handleLoginClick}
-        className={`px-14 py-6 text-xl border border-white rounded-lg hover:scale-105 transition ease-in-out duration-300 ${isButtonClicked ? 'bg-transparent' : 'bg-black'}`}
+        className={`px-14 py-6 text-xl border border-white rounded-lg  hover:scale-105 transition ease-in-out duration-300 ${isButtonClicked ? 'bg-cyan-800' : 'bg-black'}`}
         whileTap="click"
         initial="initial"
         animate={isButtonClicked ? "click" : "visible"}
