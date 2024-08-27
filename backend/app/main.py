@@ -294,6 +294,36 @@ def get_favorite_articles(user_id: int, db: Session = Depends(get_db)):
 
     return [{"title": article.title, "tldr": article.tldr, "id": article.id} for article in favorite_articles]
 
+@app.delete("/delete_article/{article_id}")
+def delete_article(article_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    # Extract user information from the token
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        if username is None:
+            raise HTTPException(status_code=401, detail="Invalid credentials")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+    user = db.query(User).filter(User.username == username).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Fetch the article from the database
+    article = db.query(Article).filter(Article.id == article_id).first()
+    if article is None:
+        raise HTTPException(status_code=404, detail="Article not found")
+
+    # Check if the user is the author of the article
+    if article.user_id != user.id:
+        raise HTTPException(status_code=403, detail="You are not authorized to delete this article")
+
+    # Delete the article from the database
+    db.delete(article)
+    db.commit()
+
+    return {"message": "Article deleted successfully"}
+
 
 # Create tables on app start
 Base.metadata.create_all(bind=engine)
