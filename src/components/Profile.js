@@ -118,7 +118,7 @@ const Profile = () => {
       </div>
 
       {/* Cards with User's Favorite Articles */}
-      <h1 className='font-poppins font-semibold text-lg mb-4 mt-6'>Favorite Articles</h1>
+      <h1 className='font-poppins font-semibold text-lg mb-4 mt-10'>Favorite Articles</h1>
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-6xl">
   {favoriteArticles.length > 0 ? (
     favoriteArticles.map((article) => (

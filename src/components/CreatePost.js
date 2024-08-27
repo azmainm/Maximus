@@ -4,14 +4,13 @@ import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 
 const tags = [
-  'Gym/Workout', 'Strength Training', 'Cardio', 'HIIT', 'Weightlifting', 
-  'Gym Equipment', 'Workout Routines', 'Fitness', 'Home Workouts', 
-  'Fitness Challenges', 'Personal Training', 'Fitness Goals', 
-  'Transformations', 'Sports', 'Running', 
+  'Gym/Workout', 'Strength', 'Cardio', 'HIIT', 'Weightlifting', 
+  'Gym Equipment', 'Routines', 'Fitness', 'Home Workouts', 
+  'Challenges', 'Fitness Goals', 
+  'Transformation', 'Sports', 'Running', 
   'Swimming', 'Cycling', 'Sports Nutrition', 'Martial Arts',
   'Muay Thai', 'MMA', 'Self-Defense', 'Marathon', 'Rope Jump', 'Yoga',
-  'Meditation', 'Mindfulness', 
-  'Mental Health', 'Stress', 'Mindfulness', 'Anxiety', 'Self-Care'
+  'Meditation', 'Mindfulness', 'Mental Health', 'Stress', 'Anxiety', 'Self-Care'
 ];
 
 const CreatePost = () => {
