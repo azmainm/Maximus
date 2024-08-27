@@ -28,10 +28,13 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 # OAuth2 scheme to retrieve token from the request header
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-# Set up CORS
+origins = [
+    "https://maximus-phi.vercel.app",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
