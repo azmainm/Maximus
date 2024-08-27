@@ -103,11 +103,11 @@ const Profile = () => {
                 <FiArrowUpRight />
               </button>
               <button
-                  onClick={() => handleDeleteArticle(article.id)}
-                  className="absolute top-2 right-12 bg-black text-white border border-cyan-300 rounded-full p-2 hover:bg-cyan-300 hover:text-black transition ease-in-out duration-200"
-                >
-                  <FiTrash2 />
-                </button>
+                onClick={() => handleDeleteArticle(article.id)}
+                className="absolute bottom-2 right-2 bg-black text-white border border-cyan-300 rounded-full p-2 hover:bg-cyan-300 hover:text-black transition ease-in-out duration-200"
+              >
+                <FiTrash2 />
+              </button>
 
             </div>
 
