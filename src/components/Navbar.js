@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { FiLogOut } from 'react-icons/fi';
 import logo from '@/images/logo.png'; 
 
 const Navbar = () => {
@@ -43,7 +44,7 @@ const Navbar = () => {
           onClick={() => router.push('/')}
           className="cursor-pointer hover:text-cyan-300 transition ease-in-out duration-200"
         >
-          Log Out
+          <FiLogOut/>
         </span>
       </div>
     </nav>
