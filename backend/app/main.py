@@ -41,6 +41,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+print("CORS middleware added")
+
+
+
 # Define the Pydantic model for the signup data
 class SignUpModel(BaseModel):
     full_name: str
