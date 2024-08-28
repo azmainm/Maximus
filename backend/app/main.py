@@ -30,6 +30,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 origins = [
     "https://maximus-phi.vercel.app",
+    "https://maximus-l5msu6k93-azmain-morsheds-projects.vercel.app",
 ]
 
 app.add_middleware(
