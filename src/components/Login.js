@@ -10,40 +10,51 @@ const Login = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
 
-  const handleLogin = async () => {
-    try {
-      const response = await fetch('https://maximus-ur9l.onrender.com/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
+  // const handleLogin = async () => {
+  //   try {
+  //     const response = await fetch('https://maximus-ur9l.onrender.com/login', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ username, password }),
+  //     });
   
-      if (!response.ok) {
-        throw new Error('');
-      }
+  //     if (!response.ok) {
+  //       throw new Error('');
+  //     }
   
-      const data = await response.json();
+  //     const data = await response.json();
       
-      // Save token and user ID in localStorage
-      localStorage.setItem('token', data.access_token);
-      localStorage.setItem('username', username);
-      localStorage.setItem('user_id', data.user_id);  
-      console.log("User ID:",data.user_id)
+  //     // Save token and user ID in localStorage
+  //     localStorage.setItem('token', data.access_token);
+  //     localStorage.setItem('username', username);
+  //     localStorage.setItem('user_id', data.user_id);  
+  //     console.log("User ID:",data.user_id)
   
-      // Trigger the animation and set the login state
-      setIsLoggingIn(true);
+  //     // Trigger the animation and set the login state
+  //     setIsLoggingIn(true);
 
-      // Wait for the animation duration before navigating
-      setTimeout(() => {
-        router.push('/article');
-      }, 1000); // Adjust the timing to match the animation duration
-    } catch (error) {
-      setError(error.message);
-      setShowErrorModal(true);
-    }
-  };
+  //     // Wait for the animation duration before navigating
+  //     setTimeout(() => {
+  //       router.push('/article');
+  //     }, 1000); // Adjust the timing to match the animation duration
+  //   } catch (error) {
+  //     setError(error.message);
+  //     setShowErrorModal(true);
+  //   }
+  // };
+  const handleLogin = async () => {
+  // No need to check for empty fields or validate input
+
+  // Trigger the animation and set the login state
+  setIsLoggingIn(true);
+
+  // Wait for the animation duration before navigating
+  setTimeout(() => {
+    router.push('/article');
+  }, 1000); // Adjust the timing to match the animation duration
+};
 
 
   return (
