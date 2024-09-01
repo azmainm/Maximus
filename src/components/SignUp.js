@@ -23,6 +23,7 @@ const SignUp = () => {
     try {
       const res = await fetch("https://maximus-ur9l.onrender.com/signup/", {
         method: "POST",
+        mode: 'no-cors',
         headers: {
           "Content-Type": "application/json",
         },
