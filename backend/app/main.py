@@ -1,6 +1,6 @@
 
 from fastapi import FastAPI, Depends, HTTPException, Query, Request
-# from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from jose import JWTError, jwt
