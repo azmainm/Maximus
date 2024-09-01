@@ -1,6 +1,6 @@
 
 from fastapi import FastAPI, Depends, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
+# from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from jose import JWTError, jwt
@@ -28,21 +28,21 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 # OAuth2 scheme to retrieve token from the request header
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-origins = [
-    "https://maximus-b85mfb2cf-azmain-morsheds-projects.vercel.app",
-    "https://maximus-phi.vercel.app",
-]
+# origins = [
+#     "https://maximus-b85mfb2cf-azmain-morsheds-projects.vercel.app",
+#     "https://maximus-phi.vercel.app",
+# ]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origin_regex='https://.*\.vercel\.app$',
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origin_regex='https://.*\.vercel\.app$',
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 
-print("CORS middleware added")
+# print("CORS middleware added")
 
 
 
