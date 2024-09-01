@@ -42,7 +42,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_middleware(CORSMiddleware)
 print("CORS middleware added")
 
 
