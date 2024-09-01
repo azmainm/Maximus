@@ -1,5 +1,5 @@
 
-from fastapi import FastAPI, Depends, HTTPException, Query
+from fastapi import FastAPI, Depends, HTTPException, Query, Request
 # from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
@@ -16,6 +16,22 @@ from fastapi.security import OAuth2PasswordBearer
 from typing import List
 from .schemas import ArticleResponse  
 from sqlalchemy import or_
+from starlette.middleware.base import BaseHTTPMiddleware
+
+class CORSMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        if request.method == "OPTIONS":
+            response = Response(status_code=200)
+            response.headers["Access-Control-Allow-Origin"] = "*"
+            response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+            response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+            return response
+        else:
+            response = await call_next(request)
+            response.headers["Access-Control-Allow-Origin"] = "*"
+            response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+            response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+            return response
 
 app = FastAPI()
 # router = APIRouter()
@@ -41,8 +57,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 #     allow_headers=["*"],
 # )
 
-
-# print("CORS middleware added")
+app.add_middleware(CORSMiddleware)
+print("CORS middleware added")
 
 
 
