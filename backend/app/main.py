@@ -69,13 +69,6 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-@app.options("/{path:path}")
-async def preflight_handler():
-    return JSONResponse(content={}, headers={
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE",
-        "Access-Control-Allow-Headers": "*"
-    })
 
 # Signup route
 @app.post("/signup/")
