@@ -36,7 +36,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 app.add_middleware(
     CORSMiddleware,
     # allow_origin_regex='https://.*\.vercel\.app$',
-    allow_origins=["*"],
+    allow_origins=["https://maximus-phi.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
