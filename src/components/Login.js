@@ -14,6 +14,7 @@ const Login = () => {
     try {
       const response = await fetch('https://maximus-ur9l.onrender.com/login', {
         method: 'POST',
+        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
