@@ -29,7 +29,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 origins = [
-    "https://maximus-pdgt7outb-azmain-morsheds-projects.vercel.app",
+    "https://maximus-lcmd5dm2b-azmain-morsheds-projects.vercel.app",
     "https://maximus-phi.vercel.app",
 ]
 
