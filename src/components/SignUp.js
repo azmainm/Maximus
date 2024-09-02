@@ -23,7 +23,6 @@ const SignUp = () => {
     try {
       const res = await fetch("https://maximus-ur9l.onrender.com/signup/", {
         method: "POST",
-        mode: 'no-cors',
         headers: {
           "Content-Type": "application/json",
         },
@@ -35,12 +34,12 @@ const SignUp = () => {
         }),
       });
   
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
+       if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(`HTTP error! status: ${res.status}, ${errorData.message}`);
+    }
   
       const data = await res.json();
-
       console.log(data);
 
       // Trigger the animation and set the Signup state
