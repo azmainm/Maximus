@@ -28,15 +28,15 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 # OAuth2 scheme to retrieve token from the request header
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-# origins = [
-#     "https://maximus-b85mfb2cf-azmain-morsheds-projects.vercel.app",
-#     "https://maximus-phi.vercel.app",
-# ]
+origins = [
+    "https://maximus-pdgt7outb-azmain-morsheds-projects.vercel.app",
+    "https://maximus-phi.vercel.app",
+]
 
 app.add_middleware(
     CORSMiddleware,
     # allow_origin_regex='https://.*\.vercel\.app$',
-    allow_origins=["https://maximus-phi.vercel.app"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
