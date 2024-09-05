@@ -39,6 +39,17 @@ const LandingPage = () => {
     }, 2000); // Delay to match the animation duration
   };
 
+  function keepAlive() {
+  fetch("http://127.0.0.1:8000/ping")
+    .then(response => response.json())
+    .then(data => console.log("Keep-alive ping:", data))
+    .catch(error => console.error("Keep-alive failed:", error));
+}
+
+// Send a request every 2-3 minutes
+setInterval(keepAlive, 180000); // 180000 ms = 3 minutes
+
+
   return (
     <motion.div
       className={`h-screen flex flex-col justify-center items-center bg-black text-white font-poppins overflow-hidden transition-colors duration-2000 ${isButtonClicked ? 'bg-white' : 'bg-black'}`}
